@@ -1,1 +1,69 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/inter-tight";
+@import "@fontsource-variable/geist-mono";
+
+:root {
+  --radius: 0.625rem;
+
+  --background: #e8eaef;
+  --foreground: #14161c;
+  --card: #f6f7f9;
+  --card-foreground: #14161c;
+  --popover: #fbfbfc;
+  --popover-foreground: #14161c;
+  --primary: #14161c;
+  --primary-foreground: #f6f7f9;
+  --secondary: #dde0e7;
+  --secondary-foreground: #14161c;
+  --muted: #dde0e7;
+  --muted-foreground: #5b6070;
+  --accent: #dde0e7;
+  --accent-foreground: #14161c;
+  --destructive: #d4351c;
+  --border: #d0d4dd;
+  --input: #d0d4dd;
+  --ring: #8a90a2;
+
+  /* Updated at runtime from the current palette. */
+  --live: #1c9a42;
+}
+
+@theme inline {
+  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-live: var(--live);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
