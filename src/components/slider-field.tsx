@@ -1,7 +1,5 @@
-import { useId } from 'react'
-
-import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
+import { cn } from '@/lib/utils'
 
 type SliderFieldProps = {
   label: string
@@ -24,23 +22,18 @@ export function SliderField({
   format = String,
   onChange,
 }: SliderFieldProps) {
-  const id = useId()
-
   return (
     <div className="grid gap-2.5" data-disabled={disabled || undefined}>
       <div className="flex items-baseline justify-between">
-        <Label htmlFor={id} className={disabled ? 'opacity-50' : undefined}>
+        <span className={cn('text-sm font-medium', disabled && 'opacity-50')}>
           {label}
-        </Label>
-        <output
-          htmlFor={id}
-          className="font-mono text-xs text-muted-foreground tabular-nums"
-        >
+        </span>
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
           {format(value)}
-        </output>
+        </span>
       </div>
       <Slider
-        id={id}
+        aria-label={label}
         value={[value]}
         min={min}
         max={max}
