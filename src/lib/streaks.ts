@@ -145,10 +145,13 @@ function drawRadial(
   const tint = rgbString(p.streak)
   const light = rgbString(p.light)
 
+  // The burst of light the rays come from.
   setBlur(30)
-  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 1.1)
-  glow.addColorStop(0, `rgba(220,232,255,${Math.min(1, 0.95 * p.glow)})`)
-  glow.addColorStop(0.45, `rgba(${light},${Math.min(1, 0.5 * p.glow)})`)
+  const cap = (a: number) => Math.min(1, a * p.glow)
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 1.3)
+  glow.addColorStop(0, `rgba(235,242,255,${cap(0.95)})`)
+  glow.addColorStop(0.32, `rgba(${light},${cap(0.85)})`)
+  glow.addColorStop(0.62, `rgba(${light},${cap(0.3)})`)
   glow.addColorStop(1, `rgba(${light},0)`)
   ctx.fillStyle = glow
   ctx.fillRect(0, 0, W, H)
@@ -168,9 +171,12 @@ function drawRadial(
     const col = rand() < 0.35 ? '255,255,255' : tint
 
     setBlur(Math.min(t.blur, 14))
-    const g = ctx.createRadialGradient(cx, cy, H * 0.25, cx, cy, R)
+    // Each ray fades out at its own distance, so some reach the edges and
+    // most die out early.
+    const reach = R * (0.3 + rand() * 0.7)
+    const g = ctx.createRadialGradient(cx, cy, H * 0.3, cx, cy, reach)
     g.addColorStop(0, `rgba(${col},${a})`)
-    g.addColorStop(0.7, `rgba(${col},${a * 0.4})`)
+    g.addColorStop(0.5, `rgba(${col},${a * 0.35})`)
     g.addColorStop(1, `rgba(${col},0)`)
     ctx.fillStyle = g
     ctx.beginPath()
