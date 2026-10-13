@@ -2,8 +2,8 @@
 
 ![streaklab](https://shieldcn.dev/header/glow.svg?title=streaklab&subtitle=Grainy%20light-streak%20backgrounds)
 
-![stars](https://shieldcn.dev/github/OWNER/REPO/stars.svg)
-![license](https://shieldcn.dev/github/OWNER/REPO/license.svg)
+![stars](https://shieldcn.dev/github/Edgarcsr/streaklab/stars.svg)
+![license](https://shieldcn.dev/github/Edgarcsr/streaklab/license.svg)
 ![vite](https://shieldcn.dev/npm/vite.svg)
 ![react](https://shieldcn.dev/npm/react.svg)
 ![tailwindcss](https://shieldcn.dev/npm/tailwindcss.svg)
@@ -12,8 +12,6 @@
 </div>
 
 **streaklab** is a single-page app that generates grainy light-streak background images. Pick a palette with the color picker, shape the streaks with sliders, and download the result as a PNG.
-
-> Replace `OWNER/REPO` in the badges above with your GitHub repository path once you push.
 
 ## Inspiration
 
@@ -68,7 +66,7 @@ The site deploys to GitHub Pages with the workflow in `.github/workflows/deploy.
 1. In the repository settings, open **Pages** and set **Source** to **GitHub Actions**.
 2. Push to `main`. The workflow builds with `GITHUB_ACTIONS` set, so Vite uses the `/streaklab/` base path.
 
-The site is served at `https://<user>.github.io/streaklab/`. If the repository has a different name, change the `base` in `vite.config.ts` to match.
+The site is served at `https://edgarcsr.github.io/streaklab/`. If the repository has a different name, change the `base` in `vite.config.ts` to match.
 
 ## Limitations
 
