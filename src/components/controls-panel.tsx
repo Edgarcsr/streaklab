@@ -1,62 +1,82 @@
-import type { ReactNode } from 'react'
+import {
+  Aperture,
+  Compass,
+  Layers,
+  type LucideIcon,
+  Palette,
+  Slash,
+  Sparkles,
+} from "lucide-react";
+import type { ReactNode } from "react";
 
-import { ColorField } from '@/components/color-field'
-import { SliderField } from '@/components/slider-field'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { applyPreset, PRESETS } from '@/lib/presets'
-import type { StreakMode, StreakParams } from '@/lib/streaks'
-import { cn } from '@/lib/utils'
+import { ColorField } from "@/components/color-field";
+import { SliderField } from "@/components/slider-field";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { applyPreset, PRESETS } from "@/lib/presets";
+import type { StreakMode, StreakParams } from "@/lib/streaks";
+import { cn } from "@/lib/utils";
 
-type ControlsPanelProps = {
-  params: StreakParams
-  onChange: (patch: Partial<StreakParams>) => void
+interface ControlsPanelProps {
+  onChange: (patch: Partial<StreakParams>) => void;
+  params: StreakParams;
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({
+  title,
+  icon: Icon,
+  children,
+}: {
+  title: string;
+  icon: LucideIcon;
+  children: ReactNode;
+}) {
   return (
     <section className="grid gap-4 border-b p-5 last:border-b-0">
-      <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
+      <h2 className="flex items-center gap-2 font-semibold text-sm tracking-tight">
+        <Icon aria-hidden className="size-4 text-muted-foreground" />
+        {title}
+      </h2>
       {children}
     </section>
-  )
+  );
 }
 
-const percent = (v: number) => `${Math.round(v * 100)}%`
+const percent = (v: number) => `${Math.round(v * 100)}%`;
 
 export function ControlsPanel({ params, onChange }: ControlsPanelProps) {
-  const radial = params.mode === 'radial'
+  const radial = params.mode === "radial";
 
   return (
     <div className="rounded-xl border bg-card">
-      <Section title="Palette">
+      <Section icon={Palette} title="Palette">
         <div className="grid grid-cols-2 gap-2">
           {PRESETS.map((preset) => {
-            const next = applyPreset(preset, params.seed)
+            const next = applyPreset(preset, params.seed);
             const active =
               next.mode === params.mode &&
               next.shadow === params.shadow &&
               next.mid === params.mid &&
               next.light === params.light &&
-              next.streak === params.streak
+              next.streak === params.streak;
             return (
               <button
-                key={preset.id}
-                type="button"
                 aria-pressed={active}
+                className={cn(
+                  "overflow-hidden rounded-lg border text-left outline-none transition-shadow focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                  active && "ring-2 ring-foreground"
+                )}
+                key={preset.id}
                 onClick={() =>
                   onChange({
+                    angle: next.angle,
+                    light: next.light,
+                    mid: next.mid,
                     mode: next.mode,
                     shadow: next.shadow,
-                    mid: next.mid,
-                    light: next.light,
                     streak: next.streak,
-                    angle: next.angle,
                   })
                 }
-                className={cn(
-                  'overflow-hidden rounded-lg border text-left transition-shadow outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
-                  active && 'ring-2 ring-foreground',
-                )}
+                type="button"
               >
                 <span
                   className="block h-9"
@@ -64,102 +84,127 @@ export function ControlsPanel({ params, onChange }: ControlsPanelProps) {
                     background: `linear-gradient(110deg, ${next.shadow}, ${next.mid} 55%, ${next.light})`,
                   }}
                 />
-                <span className="block px-2.5 py-1.5 text-sm font-medium">
+                <span className="block px-2.5 py-1.5 font-medium text-sm">
                   {preset.name}
                 </span>
               </button>
-            )
+            );
           })}
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <ColorField label="Shadow" value={params.shadow} onChange={(shadow) => onChange({ shadow })} />
-          <ColorField label="Midtone" value={params.mid} onChange={(mid) => onChange({ mid })} />
-          <ColorField label="Highlight" value={params.light} onChange={(light) => onChange({ light })} />
-          <ColorField label="Streaks" value={params.streak} onChange={(streak) => onChange({ streak })} />
+          <ColorField
+            label="Shadow"
+            onChange={(shadow) => onChange({ shadow })}
+            value={params.shadow}
+          />
+          <ColorField
+            label="Midtone"
+            onChange={(mid) => onChange({ mid })}
+            value={params.mid}
+          />
+          <ColorField
+            label="Highlight"
+            onChange={(light) => onChange({ light })}
+            value={params.light}
+          />
+          <ColorField
+            label="Streaks"
+            onChange={(streak) => onChange({ streak })}
+            value={params.streak}
+          />
         </div>
       </Section>
 
-      <Section title="Direction">
+      <Section icon={Compass} title="Direction">
         <ToggleGroup
-          type="single"
           aria-label="Streak layout"
-          value={params.mode}
-          onValueChange={(mode) => mode && onChange({ mode: mode as StreakMode })}
           className="w-full"
+          onValueChange={(mode) =>
+            mode && onChange({ mode: mode as StreakMode })
+          }
+          type="single"
+          value={params.mode}
         >
-          <ToggleGroupItem value="diagonal" className="flex-1">
+          <ToggleGroupItem className="flex-1" value="diagonal">
+            <Slash aria-hidden className="size-4" />
             Diagonal
           </ToggleGroupItem>
-          <ToggleGroupItem value="radial" className="flex-1">
+          <ToggleGroupItem className="flex-1" value="radial">
+            <Aperture aria-hidden className="size-4" />
             Radial
           </ToggleGroupItem>
         </ToggleGroup>
         <SliderField
-          label="Angle"
-          value={params.angle}
-          min={-60}
-          max={60}
           disabled={radial}
           format={(v) => `${v}°`}
+          hint="Inclinação das streaks em graus (desativado no modo radial)"
+          label="Angle"
+          max={60}
+          min={-60}
           onChange={(angle) => onChange({ angle })}
+          value={params.angle}
         />
         <SliderField
-          label="Spread"
-          value={params.fan}
-          min={0}
-          max={24}
           disabled={radial}
           format={(v) => `${v}°`}
+          hint="Abertura do leque de streaks em graus (desativado no modo radial)"
+          label="Spread"
+          max={24}
+          min={0}
           onChange={(fan) => onChange({ fan })}
+          value={params.fan}
         />
       </Section>
 
-      <Section title="Streaks">
+      <Section icon={Sparkles} title="Streaks">
         <SliderField
           label="Amount"
-          value={params.count}
-          min={10}
           max={300}
+          min={10}
           onChange={(count) => onChange({ count })}
+          value={params.count}
         />
         <SliderField
+          format={percent}
           label="Brightness"
-          value={params.intensity}
+          max={2}
           min={0.2}
-          max={2}
-          step={0.05}
-          format={percent}
           onChange={(intensity) => onChange({ intensity })}
+          step={0.05}
+          value={params.intensity}
         />
         <SliderField
-          label="Thickness"
-          value={params.thickness}
-          min={0.4}
-          max={2.5}
-          step={0.05}
           format={(v) => `${v.toFixed(2)}×`}
+          hint="Espessura de todas as streaks"
+          label="Thickness"
+          max={2.5}
+          min={0.4}
           onChange={(thickness) => onChange({ thickness })}
+          step={0.05}
+          value={params.thickness}
         />
         <SliderField
-          label="Glow"
-          value={params.glow}
-          min={0}
-          max={2}
-          step={0.05}
           format={percent}
+          hint="Halo luminoso em volta das streaks"
+          label="Glow"
+          max={2}
+          min={0}
           onChange={(glow) => onChange({ glow })}
+          step={0.05}
+          value={params.glow}
         />
       </Section>
 
-      <Section title="Texture">
+      <Section icon={Layers} title="Texture">
         <SliderField
+          hint="Granulação de filme sobreposta ao fundo"
           label="Grain"
-          value={params.grain}
-          min={0}
           max={100}
+          min={0}
           onChange={(grain) => onChange({ grain })}
+          value={params.grain}
         />
       </Section>
     </div>
-  )
+  );
 }

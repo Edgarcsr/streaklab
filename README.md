@@ -38,27 +38,37 @@ A small seeded PRNG (mulberry32) drives all randomness, so the same settings and
 - [Tailwind CSS](https://tailwindcss.com) v4
 - [shadcn/ui](https://ui.shadcn.com) style components on Radix (`radix-ui`)
 - Color picker with the compound API of the [shadcn.io color picker](https://www.shadcn.io/components/forms/color-picker)
-- [Vitest](https://vitest.dev) for tests and [Oxlint](https://oxc.rs) for linting
+- [Vitest](https://vitest.dev) for tests and [Ultracite](https://www.ultracite.ai) (Biome) for linting and formatting
 
 ## Getting started
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 | Script | What it does |
 | --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Typecheck and build for production |
-| `npm test` | Run the unit tests |
-| `npm run lint` | Lint with Oxlint |
+| `bun run dev` | Start the dev server |
+| `bun run build` | Typecheck and build for production |
+| `bun run test` | Run the unit tests |
+| `bun run lint` | Check lint and format with Ultracite |
+| `bun run format` | Auto-fix lint and format issues with Ultracite |
 
 ## About the color picker
 
 The picker in `src/components/ui/color-picker.tsx` was written by hand to follow the compound-component API of the shadcn.io one (`ColorPicker`, `ColorPickerSelection`, `ColorPickerHue`, `ColorPickerEyeDropper`, `ColorPickerOutput`, `ColorPickerFormat`). It handles opaque `#rrggbb` colors only, with no alpha channel.
 
-If you prefer the original, install it with the shadcn CLI. Check the Installation tab on the [component page](https://www.shadcn.io/components/forms/color-picker) for the exact command; shadcn.io components are installed with a URL of the form `npx shadcn@latest add https://www.shadcn.io/r/<name>.json`. The original may use a different `onChange` signature and need small changes in `src/components/color-field.tsx`.
+If you prefer the original, install it with the shadcn CLI. Check the Installation tab on the [component page](https://www.shadcn.io/components/forms/color-picker) for the exact command; shadcn.io components are installed with a URL of the form `bunx shadcn@latest add https://www.shadcn.io/r/<name>.json`. The original may use a different `onChange` signature and need small changes in `src/components/color-field.tsx`.
+
+## Deploy
+
+The site deploys to GitHub Pages with the workflow in `.github/workflows/deploy.yml`. It runs on every push to `main` (and can be started by hand from the Actions tab).
+
+1. In the repository settings, open **Pages** and set **Source** to **GitHub Actions**.
+2. Push to `main`. The workflow builds with `GITHUB_ACTIONS` set, so Vite uses the `/streaklab/` base path.
+
+The site is served at `https://<user>.github.io/streaklab/`. If the repository has a different name, change the `base` in `vite.config.ts` to match.
 
 ## Limitations
 

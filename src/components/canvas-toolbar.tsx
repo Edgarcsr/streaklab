@@ -1,16 +1,24 @@
-import { Download, Shuffle } from 'lucide-react'
+import { Download, Shuffle } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { EXPORT_SIZES, sizeLabel, type ExportSize } from '@/lib/export'
+import { ShortcutKeys } from "@/components/command-palette";
+import { SIZE_ICONS } from "@/components/size-icons";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { DOWNLOAD_SHORTCUT, SHUFFLE_SHORTCUT } from "@/lib/commands";
+import { EXPORT_SIZES, type ExportSize, sizeLabel } from "@/lib/export";
 
-type CanvasToolbarProps = {
-  seed: number
-  size: ExportSize
-  busy: boolean
-  onShuffle: () => void
-  onSizeChange: (size: ExportSize) => void
-  onDownload: () => void
+interface CanvasToolbarProps {
+  busy: boolean;
+  onDownload: () => void;
+  onShuffle: () => void;
+  onSizeChange: (size: ExportSize) => void;
+  seed: number;
+  size: ExportSize;
 }
 
 export function CanvasToolbar({
@@ -24,36 +32,62 @@ export function CanvasToolbar({
   return (
     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-3">
-        <Button variant="outline" onClick={onShuffle}>
-          <Shuffle />
-          Shuffle
-        </Button>
-        <span className="font-mono text-xs text-muted-foreground">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button onClick={onShuffle} variant="outline">
+              <Shuffle aria-hidden className="size-4" />
+              Shuffle
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            Embaralhar seed
+            <ShortcutKeys shortcut={SHUFFLE_SHORTCUT} />
+          </TooltipContent>
+        </Tooltip>
+        <span className="font-mono text-muted-foreground text-xs">
           seed {seed}
         </span>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
         <ToggleGroup
-          type="single"
           aria-label="Image size"
-          value={size.id}
           onValueChange={(id) => {
-            const next = EXPORT_SIZES.find((s) => s.id === id)
-            if (next) onSizeChange(next)
+            const next = EXPORT_SIZES.find((s) => s.id === id);
+            if (next) {
+              onSizeChange(next);
+            }
           }}
+          type="single"
+          value={size.id}
         >
-          {EXPORT_SIZES.map((s) => (
-            <ToggleGroupItem key={s.id} value={s.id} className="font-mono text-xs">
-              {sizeLabel(s)}
-            </ToggleGroupItem>
-          ))}
+          {EXPORT_SIZES.map((s) => {
+            const Icon = SIZE_ICONS[s.id];
+            return (
+              <ToggleGroupItem
+                className="font-mono text-xs"
+                key={s.id}
+                value={s.id}
+              >
+                <Icon aria-hidden className="size-4" />
+                {sizeLabel(s)}
+              </ToggleGroupItem>
+            );
+          })}
         </ToggleGroup>
-        <Button onClick={onDownload} disabled={busy}>
-          <Download />
-          {busy ? 'Rendering…' : 'Download PNG'}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button disabled={busy} onClick={onDownload}>
+              <Download aria-hidden className="size-4" />
+              {busy ? "Rendering…" : "Download PNG"}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            Baixar PNG
+            <ShortcutKeys shortcut={DOWNLOAD_SHORTCUT} />
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
-  )
+  );
 }

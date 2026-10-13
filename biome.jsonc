@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/vitest"
+  ],
+  "files": {
+    "includes": ["!public", "!src/components/ui"]
+  },
+  "linter": {
+    "rules": {
+      "performance": {
+        "noJsxPropsBind": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noBitwiseOperators": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/lib/streaks.ts", "src/lib/color.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          },
+          "style": {
+            "noIncrementDecrement": "off",
+            "noMultiAssign": "off",
+            "noNestedTernary": "off"
+          }
+        }
+      }
+    }
+  ]
+}
